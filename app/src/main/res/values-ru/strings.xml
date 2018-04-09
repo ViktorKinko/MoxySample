@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoxyTest</string>
+    <string name="cart_count">У тебя %1$d карасей</string>
+    <string name="daily_best">Лучший за день</string>
+    <string name="weekly_best">Лучший за неделю</string>
+    <string name="all_time_best">Просто лучший</string>
+    <string name="motto">Копи карасей, но бойся гусей</string>
+</resources>

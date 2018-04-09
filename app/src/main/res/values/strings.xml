@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MoxyTest</string>
+    <string name="cart_count">You have %1$d points</string>
+    <string name="daily_best">Daily best</string>
+    <string name="weekly_best">Weekly best</string>
+    <string name="all_time_best">All time best</string>
+    <string name="motto">Save your points from the geese!</string>
+</resources>
