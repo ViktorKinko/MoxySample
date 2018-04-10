@@ -46,27 +46,33 @@ class HighscorePresenter : MvpPresenter<HighscoreView>() {
         viewState.setAllTimeHighscore(allTimeHighscore)
     }
 
-    private fun getWeeklyHighscore(): Int {
-        val weeklyUpdate = SPref(this.ctx).getLong(ARG_WEEKLY_UPDATE_TIME)
-        if (weeklyUpdate > System.currentTimeMillis()) {
-            return SPref(this.ctx).getInt(ARG_HIGHSCORE_WEEKLY)
-        } else {
-            SPref(this.ctx).set(ARG_WEEKLY_UPDATE_TIME, DateTime(System.currentTimeMillis()).withDayOfWeek(1).plusWeeks(1).millis)
-            SPref(this.ctx).set(ARG_HIGHSCORE_WEEKLY, 0)
-        }
-        return 0
+    private fun startOfTheDay(time: Long): DateTime {
+        return DateTime(time).withTimeAtStartOfDay()
     }
 
     private fun getDailyHighscore(): Int {
         val dailyUpdate = SPref(this.ctx).getLong(ARG_DAILY_UPDATE_TIME)
-        if (dailyUpdate > System.currentTimeMillis()) {
-            return SPref(this.ctx).getInt(ARG_HIGHSCORE_DAILY)
+        return if (startOfTheDay(dailyUpdate).millis > startOfTheDay(System.currentTimeMillis()).millis) {
+            SPref(this.ctx).getInt(ARG_HIGHSCORE_DAILY)
         } else {
-            SPref(this.ctx).set(ARG_DAILY_UPDATE_TIME, DateTime(System.currentTimeMillis()).plusDays(1).millis)
+            SPref(this.ctx).set(ARG_DAILY_UPDATE_TIME, startOfTheDay(System.currentTimeMillis()).plusDays(1).millis)
             SPref(this.ctx).set(ARG_HIGHSCORE_DAILY, 0)
+            0
         }
-        return 0
     }
 
+    private fun startOfTheWeek(time: Long): DateTime {
+        return DateTime(time).withDayOfWeek(1).withTimeAtStartOfDay()
+    }
 
+    private fun getWeeklyHighscore(): Int {
+        val weeklyUpdate = SPref(this.ctx).getLong(ARG_WEEKLY_UPDATE_TIME)
+        return if (startOfTheWeek(weeklyUpdate).millis > startOfTheWeek(System.currentTimeMillis()).millis) {
+            SPref(this.ctx).getInt(ARG_HIGHSCORE_WEEKLY)
+        } else {
+            SPref(this.ctx).set(ARG_WEEKLY_UPDATE_TIME, startOfTheWeek(System.currentTimeMillis()).plusWeeks(1).millis)
+            SPref(this.ctx).set(ARG_HIGHSCORE_WEEKLY, 0)
+            0
+        }
+    }
 }
